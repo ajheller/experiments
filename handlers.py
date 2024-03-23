@@ -1,5 +1,9 @@
 import signal, sys, time, inspect
 
+# Relevant pages
+#   https://docs.python.org/3/library/signal.html
+#   https://stackoverflow.com/questions/21120947/catching-keyboardinterrupt-in-python-during-program-shutdown
+
 
 def sigint_handler(sig, frame):
     sys.stderr.write("\nInterrupted")
@@ -10,7 +14,7 @@ def sigint_handler(sig, frame):
     for f in frame.__dir__():
         if f[0] == "f":
             print(f)
-            print(frame.f)
+            print(getattr(frame, f))
 
     # signal.signal(signal.SIGINT, signal.SIG_IGN)
     print("Cleanup")
@@ -21,7 +25,10 @@ def sigint_handler(sig, frame):
 
 
 def sigalarm_handler(sig, frame):
-    print("hi")
+    try:
+        print("hi")
+    finally:
+        pass
 
 
 signal.signal(signal.SIGINT, sigint_handler)
